@@ -13,7 +13,9 @@
 //   10/21–10/27：由開發板控制繼電器開關水泵與風扇，連續運作無異常
 #include "config.h"
 #include "interfaces.h"
-
+const int relayPin=7;
+const int buzzerPin = 8;
+int relay_is_on=0;//0=off,1=on
 
 // ------------------------------------------------------------
 // void actuatorsInit()
@@ -22,10 +24,15 @@
 // 注意：有些繼電器是低電位觸發，腳位剛設成輸出的瞬間可能會短暫觸發。
 //      要確認開機時水泵不會被誤開，必要時調整設定腳位的順序。
 // ------------------------------------------------------------
-void actuatorsInit() {
+void actuatorsInit() 
+{
   // TODO(玟君)
-}
+  pinMode(relayPin, OUTPUT);
+  digitalWrite(relayPin,HIGH);
 
+  pinMode(buzzerPin, OUTPUT);
+  digitalWrite(buzzerPin, HIGH);
+}
 
 // ------------------------------------------------------------
 // void pumpOn() / void pumpOff()
@@ -33,60 +40,45 @@ void actuatorsInit() {
 // 功能：透過繼電器打開或關閉水泵，並記錄目前狀態。
 // 注意：依 RELAY_ACTIVE_LOW 決定要輸出高電位還是低電位才算「開」。
 // ------------------------------------------------------------
-void pumpOn() {
+void pumpOn() 
+{
   // TODO(玟君)
+  digitalWrite(relayPin,LOW);
+  relay_is_on=1;
 }
 
-void pumpOff() {
+void pumpOff() 
+{
   // TODO(玟君)
+  digitalWrite(relayPin,HIGH);
+  relay_is_on=0;
 }
-
-
+//void fanOn() / void fanOff() / bool isFanOn()刪掉
 // ------------------------------------------------------------
 // bool isPumpOn()
 // 呼叫者：安全模組、主程式的狀態輸出
 // 回傳：水泵目前是否開著
 // ------------------------------------------------------------
-bool isPumpOn() {
+bool isPumpOn() 
+{
   // TODO(玟君)
-  return false;  // 暫時的回傳值，只是為了能編譯，實作後刪除
+  return relay_is_on==1;
+  // 暫時的回傳值，只是為了能編譯，實作後刪除
 }
-
-
-// ------------------------------------------------------------
-// void fanOn() / void fanOff()
-// 呼叫者：控制狀態機
-// 功能：透過繼電器打開或關閉風扇，並記錄目前狀態。
-// ------------------------------------------------------------
-void fanOn() {
-  // TODO(玟君)
-}
-
-void fanOff() {
-  // TODO(玟君)
-}
-
-
-// ------------------------------------------------------------
-// bool isFanOn()
-// 呼叫者：主程式的狀態輸出
-// 回傳：風扇目前是否開著
-// ------------------------------------------------------------
-bool isFanOn() {
-  // TODO(玟君)
-  return false;  // 暫時的回傳值，只是為了能編譯，實作後刪除
-}
-
 
 // ------------------------------------------------------------
 // void buzzerOn() / void buzzerOff()
 // 呼叫者：安全模組
 // 功能：讓有源蜂鳴器響或停。間歇鳴叫等提醒方式由安全模組（娟華）控制。
 // ------------------------------------------------------------
-void buzzerOn() {
+void buzzerOn() 
+{
   // TODO(玟君)
+  digitalWrite(buzzerPin, LOW);
 }
 
-void buzzerOff() {
+void buzzerOff() 
+{
   // TODO(玟君)
+  digitalWrite(buzzerPin, HIGH);
 }
